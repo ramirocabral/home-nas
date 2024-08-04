@@ -1,0 +1,4 @@
+# m h  dom mon dow   command
+0 22 * * * python3 /usr/local/bin/smart_updates.py
+0 2 * * 1 [ $(($(date +\%s) / 604800 % 4)) -eq 0 ] && bash /usr/local/bin/full_backup.sh
+0 2 * * 1 [ $(($(date +\%s) / 604800 % 4)) -ne 0 ] && bash /usr/local/bin/inc_backup.sh
