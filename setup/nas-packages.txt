@@ -8,3 +8,4 @@ xfsprogs
 lm-sensors
 ntfs-3g
 hdparm
+curl
