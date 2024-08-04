@@ -1,0 +1,34 @@
+#first, we have to remove all the FS signatures from the disk
+wipefs -a /dev/sdb
+
+#now, create the physical volume
+pvcreate /dev/sdb
+
+#create the volume group
+
+vgcreate <vgName> /dev/sdb
+
+#with the volume group created, now we can create the logical volumes. in my case, i will only create only one big LV.
+#It is strongly recommended to have some free space on the VG to avoid problems when resizing the LV.
+
+lvcreate -n <lvName> -l 99%FREE <vgName>
+
+#now we can set the filesystem of the disk. In my case, i will use XFS.
+
+mkfs.xfs /dev/mapper/<vgName>-<lvName>
+
+#mount the drives, wherever you want.
+
+mkdir /media/storage
+mount -t xfs /dev/mapper/<vgName>-<lvName> /media/storage
+
+#in order to mount the lv when the system starts, we have to edit the fstab config
+#first, we need the UUID of the LVM:
+
+blkid | grep <vgName>
+
+#now edit the fstab config file (/etc/fstab):
+
+<UUID>	/media/storage	xfs	defaults	0 2
+
+Ramiro Cabral

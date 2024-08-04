@@ -1,0 +1,1 @@
+UUID=97b9752a-9013-4bbe-86d0-78f08fc37c25       /media/storage  xfs     defaults        0 2

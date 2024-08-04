@@ -1,0 +1,52 @@
+#stop the samba service
+systemctl stop smbd
+
+#create a backup of the default config
+
+cd /etc/samba
+mv /etc/samba/smb.conf /etc/samba/smb.conf.bkp
+
+#now create a new cfg file.
+#In this example, we have a public directory, to which everyone in the network will have full access (r/w), and a private directory only accessible to one user
+
+[global]
+server string = File Server
+security = user
+workgroup = WORKGROUP
+map to guest = Bad User
+guest ok = yes
+guest only = yes
+usershare allow guests = yes
+name resolve order = bcast host
+dns proxy = no
+
+[public]
+comment = Public Files
+path = /media/storage/public
+browsable = yes
+writable = yes
+guest ok = yes
+read only = no
+force user = your_user
+force group = your_user
+
+[private]
+path = /media/storage/private
+browsable = yes
+writable = yes
+read only = no
+valid users = your_user
+
+#create the samba user. This user has to have the same name and password of your linux/windows user, otherwise, you won't have access to the share.
+
+smbpasswd -a your_user
+
+#now change the ownership of the folders
+
+sudo chown your_user:your_user /media/storage --recursive
+
+#and:
+sudo chmod 777 /media/storage/private --recursive
+sudo chmod 775 /media/storage/public --recursive
+
+Ramiro Cabral

@@ -1,0 +1,10 @@
+smartmontools
+openssh-server
+htop
+sudo
+neofetch
+samba
+xfsprogs
+lm-sensors
+ntfs-3g
+hdparm
