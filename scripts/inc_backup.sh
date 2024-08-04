@@ -4,7 +4,7 @@
 
 API_TOKEN="XXXX"
 CHAT_ID=XXXX
-API_URL="https://api.telegram.org/bot$API_TOKEN/sendMessage"
+API_URL="https://api.telegram.org/bot${API_TOKEN}/sendMessage"
 
 error(){
         echo "ERROR" >> $LOG
@@ -40,7 +40,7 @@ sleep 30s
 echo "Unmounting HDD..." >> $LOG 
 umount /mnt/HDD_BACKUP || error
 
-echo "Shutting down HDD" >> $LOGSFILE
+echo "Shutting down HDD" >> $LOG
 #shutdown HDD, 1m sleep just to make sure all the cached data is written to disk
 sync
 sleep 1m
@@ -54,3 +54,5 @@ echo "FINISHED $DATE INCREMENTAL BACKUP" >> $LOG
 curl -s -X POST $API_URL -d chat_id=$CHAT_ID -d text="$(cat "${LOG}")"
 
 cat $LOG >> /var/log/BACKUP_LOG
+
+rm $LOG

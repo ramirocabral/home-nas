@@ -4,7 +4,7 @@
 
 API_TOKEN="XXXX"
 CHAT_ID=XXXX
-API_URL="https://api.telegram.org/bot$API_TOKEN/sendMessage"
+API_URL="https://api.telegram.org/bot${API_TOKEN}/sendMessage"
 
 error(){
         echo "ERROR" >> $LOG
@@ -32,7 +32,7 @@ OLD_BACKUP="${BACKUP_DIR}/$(ls -lt /${BACKUP_DIR} | tail -n 1 | awk '{print $NF}
 rm -rf $OLD_BACKUP || error
 echo "Deleted $OLD_BACKUP" >> $LOG
 
-mkdir $DEST
+mkdir -p $DEST
 echo "Copying files..." >> $LOG
 echo "$SOURCE1 -> $DEST" >> $LOG
 rsync -a --delete $SOURCE1 $DEST >> $LOG || error
@@ -54,6 +54,8 @@ systemctl start smbd || error
 
 echo "FINISHED $DATE FULL BACKUP" >> $LOG
 
-curl -s -X POST $API_URL -d chat_id=$CHAT_ID -d text="$(cat "${LOG}")"
+curl -s -X POST $API_URL -d chat_id=$CHAT_ID -d text="$(cat ${LOG})" >> /dev/null
 
 cat $LOG >> /var/log/BACKUP_LOG
+
+rm $LOG
